@@ -1,0 +1,67 @@
+import os
+import pickle
+
+class TodoList:
+    def __init__(self):
+        self.tasks = []
+
+    def display_tasks(self):
+        if not self.tasks:
+            print("No tasks in the list.")
+        else:
+            print("Tasks:")
+            for i, task in enumerate(self.tasks, start=1):
+                print(f"{i}. {task}")
+
+    def add_task(self, task):
+        self.tasks.append(task)
+        print(f"Task '{task}' added.")
+
+    def delete_task(self, task_index):
+        if 1 <= task_index <= len(self.tasks):
+            deleted_task = self.tasks.pop(task_index - 1)
+            print(f"Task '{deleted_task}' deleted.")
+        else:
+            print("Invalid task index.")
+
+    def save_to_file(self, filename):
+        with open(filename, 'wb') as file:
+            pickle.dump(self.tasks, file)
+        print("Tasks saved to file.")
+
+    def load_from_file(self, filename):
+        if os.path.exists(filename):
+            with open(filename, 'rb') as file:
+                self.tasks = pickle.load(file)
+            print("Tasks loaded from file.")
+        else:
+            print("File not found.")
+
+def main():
+    todo_list = TodoList()
+
+    while True:
+        print("\n1. Display Tasks\n2. Add Task\n3. Delete Task\n4. Save to File\n5. Load from File\n6. Exit")
+        choice = input("Enter your choice (1-6): ")
+
+        if choice == '1':
+            todo_list.display_tasks()
+        elif choice == '2':
+            task = input("Enter task: ")
+            todo_list.add_task(task)
+        elif choice == '3':
+            task_index = int(input("Enter task index to delete: "))
+            todo_list.delete_task(task_index)
+        elif choice == '4':
+            filename = input("Enter filename to save: ")
+            todo_list.save_to_file(filename)
+        elif choice == '5':
+            filename = input("Enter filename to load: ")
+            todo_list.load_from_file(filename)
+        elif choice == '6':
+            break
+        else:
+            print("Invalid choice. Please enter a number between 1 and 6.")
+
+if __name__ == "__main__":
+    main()
